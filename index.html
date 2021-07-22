@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>@dp-instant/game-empty-project</title>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="format-detection" content="telephone-no" />
+        <meta
+            name="viewport"
+            content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, height=device-height"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no" />
+        
+        <script src="https://connect.facebook.net/en_US/fbinstant.6.3.js"></script>
+         
+
+        <style>
+            body,
+            html {
+                margin: 0;
+                height: 100%;
+                overflow: hidden;
+                /* background: black; */
+            }
+            #game-root {
+                position: absolute;
+            }
+            #game-canvas,
+            #game-root {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <script>
+            (function (b) {
+                var _loaded = 0;
+                Object.defineProperty(b, "loaded", {
+                    set: function (v) {
+                        _loaded = v;
+                        if (typeof FBInstant !== "undefined") {
+                            FBInstant.setLoadingProgress(_loaded);
+                        }
+                    },
+                    get: function () {
+                        return _loaded;
+                    }
+                });
+                b.onLoaded = function () {
+                    b.ready = true;
+                    while (b.cbc.length) {
+                        var cb = b.cbc.pop();
+                        cb && cb();
+                    }
+                };
+                function waitForFBInstant() {
+                    if (typeof FBInstant === "undefined") {
+                        setTimeout(waitForFBInstant, 10);
+                    } else {
+                        if (typeof gsap !== "undefined") {
+                            gsap.to(b, {loaded: 25, duration: 5});
+                        }
+                        FBInstant.initializeAsync().then(function () {
+                            b.onLoaded();
+                        });
+                    }
+                }
+                waitForFBInstant();
+            })((window.__diffbus = {ready: false, cbc: []}));
+        </script>
+    <script defer src="main.js"></script></head>
+    <body>
+        <div id="debug-info" style="font-size: medium; position: absolute; left: 10px; z-index: 10000">#@dp-instant/game-empty-project (@dp-instant/game-empty-project)</div>
+        <div id="game-root">
+            <canvas id="game-canvas"></canvas>
+        </div>
+    </body>
+</html>
